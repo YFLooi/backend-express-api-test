@@ -6,3 +6,6 @@ Run instructions:
 2.  Start up server.js using `yarn run local`
 3.  Open page.html on any browser. It is set to query server.js at
     `http://localhost:3000`
+
+Done as part of Tribehired assessment:
+https://github.com/tribehired-devs/backend-test

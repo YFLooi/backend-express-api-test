@@ -1,0 +1,131 @@
+<html>
+  <script type="text/javascript">
+    const BASE_URL = "http://localhost:3000";
+
+    async function getComments() {
+      const comments = await fetch(`${BASE_URL}/get-comments`, {
+        method: "POST",
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          return data;
+        });
+      console.log(`Number of comments found: ${comments[`total_number_of_comments`]}`)
+      appendToResultsBox(comments.data);
+    }
+    async function getFilteredComments() {
+      const filter = document.getElementById("filter-select").value;
+      const criteria = document.getElementById("filter-criteria").value;
+
+      if(!filter || !criteria){
+        alert("Please set a valid filter-criteria combination")
+        return null;
+      }
+
+      const comments = await fetch(`${BASE_URL}/get-filtered-comments`, {
+        method: "POST",
+        body: JSON.stringify({
+          filter: filter,
+          criteria: criteria
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          return data.data;
+        });
+      appendToResultsBox(comments);
+    }
+    async function getSinglePost() {
+      const post_id = document.getElementById("post_id").value;
+      if(!post_id){
+        alert("Please insert a valid post_id")
+        return null;
+      }
+
+      const post = await fetch(`${BASE_URL}/get-single-post`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          post_id: post_id,
+        }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          return data.data;
+        });
+      
+        if(post?.data){
+          appendToResultsBox(post);
+        } else {
+          const errMsg = `No match found for post_id == ${post_id}`;
+          appendToResultsBox([errMsg]);
+        }
+    }
+    async function getAllPosts() {
+      const posts = await fetch(`${BASE_URL}/get-all-posts`, {
+        method: "POST",
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          return data;
+        });
+      console.log(`Number of comments found: ${posts[`total_number_of_comments`]}`)
+      appendToResultsBox(posts.data);
+    }
+    function appendToResultsBox(input) {
+      const resultsBox = document.getElementById("results-box");
+      resultsBox.innerHTML = "";
+
+      if(typeof input == "object"){
+        for (const i of input) {
+          const row = document.createElement("p");
+          row.innerHTML =  JSON.stringify(i, null, 2);
+          resultsBox.appendChild(row);
+        }
+      } else {
+        resultsBox.innerHTML = JSON.stringify(input, null, 2);
+      }
+    }
+  </script>
+  <body>
+    <h1>Query REST API control panel</h1>
+    <div style="display: flex; justify-content: space-around">
+      <div>
+        <button onclick="getComments()">Get comments</button>
+      </div>
+      <div>
+        <label for="filter-select"></label>
+        <select id="filter-select">
+          <option value="postId">postId</option>
+          <option value="id">id</option>
+          <option value="name">Name</option>
+          <option value="email">Email</option>
+          <option value="body">Body</option>
+        </select>
+        <input id="filter-criteria"  placeholder="yihfoo@gmail.com"></input>
+        <button onclick="getFilteredComments()">Get filtered comments</button>
+      </div>
+      <div>
+        <input id="post_id"  placeholder="123"></input>
+        <button onclick="getSinglePost()">Get single post</button>
+      </div>
+      <div>
+        <button onclick="getAllPosts()">Get all posts</button>
+      </div>
+    </div>
+    <div id="results-box"></div>
+  </body>
+</html>

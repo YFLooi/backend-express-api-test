@@ -33,7 +33,7 @@ server.post(`/get-comments`, async (req, res) => {
 
     return res
       .status("200")
-      .json({ data: data, total_number_of_comments: data?.length });
+      .json({ data: data, total_number_of_comments: data?.length ?? 0 });
   } catch (err) {
     console.log(`Unable to fetch from /comments API. Err: ${err}`);
     return res.status("400").json({ err: err });
@@ -102,7 +102,7 @@ server.post(`/get-single-post`, async (req, res) => {
 
     return res
       .status("200")
-      .json({ data: data, total_number_of_comments: data?.length });
+      .json({ data: data, total_number_of_comments: data?.length ?? 0 });
   } catch (err) {
     console.log(`Unable to fetch from /single-post API. Err: ${err}`);
     return res.status("400").json({ err: err });
@@ -131,7 +131,7 @@ server.post(`/get-all-posts`, async (req, res) => {
 
     return res
       .status("200")
-      .json({ data: data, total_number_of_comments: data?.length });
+      .json({ data: data, total_number_of_comments: data?.length ?? 0 });
   } catch (err) {
     console.log(`Unable to fetch from /all-posts API. Err: ${err}`);
     return res.status("400").json({ err: err });

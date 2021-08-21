@@ -38,9 +38,11 @@
           return res.json();
         })
         .then((data) => {
-          return data.data;
+          return data;
         });
-      appendToResultsBox(comments);
+
+      console.log(`Number of filtered comments found: ${comments.data?.length ?? 0}`)
+      appendToResultsBox(comments.data);
     }
     async function getSinglePost() {
       const post_id = document.getElementById("post_id").value;
@@ -82,7 +84,7 @@
         .then((data) => {
           return data;
         });
-      console.log(`Number of comments found: ${posts[`total_number_of_comments`]}`)
+      console.log(`Number of posts found: ${posts[`total_number_of_comments`]}`)
       appendToResultsBox(posts.data);
     }
     function appendToResultsBox(input) {
